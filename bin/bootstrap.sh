@@ -3,13 +3,7 @@
 # Preparation script based on https://github.com/olberger/baseimage-docker
 #
 
-## Prettify alert messages
-function MSG() {
-  local i='\033[1;32m(\033[0;32m(\033[1;30m(\033[mi\033[1;30m)\033[0;32m)\033[1;32m)\033[m'
-  local r='\033[0;31m'
-  local n='\033[0m'
-  echo -e "${i}${r} $1$n" 
-}
+. /opt/chambana/lib/common.sh
 
 APT_INSTALL='apt-get install -y --no-install-recommends'
 
@@ -51,4 +45,4 @@ rm -rf /var/lib/apt/lists/*
 rm -f /etc/dpkg/dpkg.cfg.d/02apt-speedup
 
 ## Remove self
-rm -f /prepare.sh
+rm -f /opt/chambana/bin/bootstrap.sh
