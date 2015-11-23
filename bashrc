@@ -7,7 +7,7 @@ if [[ $- != *i* ]] ; then
 fi
 
 #ENVIRONMENT
-export EDITOR="vim"
+#export EDITOR="vim"
 export PAGER="less"
 export HISTFILESIZE=3000 # the bash history should save 3000 commands
 export HISTCONTROL=ignoreboth #no duplicates in history, commands w/ preceding space get ignored
