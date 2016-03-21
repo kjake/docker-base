@@ -1,0 +1,11 @@
+Package: *
+Pin: release o=Debian,n=jessie-updates
+Pin-Priority: 990
+
+Package: *
+Pin: release n=jessie-backports
+Pin-Priority: 600
+
+Package: *
+Pin: release a=unstable
+Pin-Priority: -1
