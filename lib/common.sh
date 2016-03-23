@@ -34,3 +34,8 @@ function ERR() {
 function CHECK_BIN() {
 	hash "$1" 2>/dev/null || { ERR "Program '$1' not found.  Aborting."; exit 1; }
 }
+
+## Check if variable is defined and abort if not.
+function CHECK_VAR() {
+	[[ -z ${1+x} ]] && { ERR "Variable not defined.  Aborting."; exit 1; }
+}
