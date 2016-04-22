@@ -29,7 +29,7 @@ ln -sf /bin/true /usr/bin/ischroot
 
 MSG "Installing packages..."
 $APT_INSTALL apt-utils
-$APT_INSTALL apt-transport-https locales debconf-utils
+$APT_INSTALL apt-transport-https locales debconf-utils vim-tiny less telnet
 
 ## Fix locale.
 dpkg-reconfigure locales && locale-gen C.UTF-8 && /usr/sbin/update-locale LANG=C.UTF-8

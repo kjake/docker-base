@@ -37,5 +37,5 @@ function CHECK_BIN() {
 
 ## Check if variable is defined and abort if not.
 function CHECK_VAR() {
-	[[ -z ${1+x} ]] && { ERR "Variable not defined.  Aborting."; exit 1; }
+	[[ -v $1 ]] || { ERR "Variable $1 is not defined.  Aborting."; exit 1; }
 }
