@@ -11,10 +11,10 @@ ADD distro /etc/apt/preferences.d/distro
 ADD 99default-release /etc/apt/apt.conf.d/99default-release
 
 # Prepare environment
-ADD lib/common.sh /opt/chambana/lib/common.sh
-ADD bin/bootstrap.sh /opt/chambana/bin/bootstrap.sh
-RUN chmod 0755 /opt/chambana/bin/bootstrap.sh
-RUN /opt/chambana/bin/bootstrap.sh
+ADD lib/common.sh /app/lib/common.sh
+ADD bin/bootstrap.sh /app/bin/bootstrap.sh
+RUN chmod 0755 /app/bin/bootstrap.sh
+RUN /app/bin/bootstrap.sh
 
 # Install Chambana.net bashrc
 ADD bashrc /etc/bash.bashrc

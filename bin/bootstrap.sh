@@ -3,7 +3,7 @@
 # Preparation script based on https://github.com/olberger/baseimage-docker
 #
 
-. /opt/chambana/lib/common.sh
+. /app/lib/common.sh
 
 APT_INSTALL='apt-get install -y --no-install-recommends'
 
@@ -45,4 +45,4 @@ rm -rf /var/lib/apt/lists/*
 rm -f /etc/dpkg/dpkg.cfg.d/02apt-speedup
 
 ## Remove self
-rm -f /opt/chambana/bin/bootstrap.sh
+rm -f /app/bin/bootstrap.sh
