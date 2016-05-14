@@ -20,3 +20,4 @@ RUN /app/bin/bootstrap.sh
 ADD bashrc /etc/bash.bashrc
 
 ENV LC_ALL C.UTF-8
+ENV TERM xterm
