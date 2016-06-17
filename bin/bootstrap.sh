@@ -31,6 +31,9 @@ MSG "Installing packages..."
 $APT_INSTALL apt-utils
 $APT_INSTALL apt-transport-https locales debconf-utils vim-tiny less telnet
 
+## Link vim -> vim.tiny
+ln -sf /usr/bin/vim.tiny /usr/bin/vim
+
 ## Fix locale.
 dpkg-reconfigure locales && locale-gen C.UTF-8 && /usr/sbin/update-locale LANG=C.UTF-8
 
