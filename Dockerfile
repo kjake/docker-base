@@ -1,4 +1,4 @@
-FROM debian:jessie-backports
+FROM debian:stretch-backports
 
 MAINTAINER Josh King <jking@chambana.net>
 

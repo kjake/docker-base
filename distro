@@ -1,9 +1,9 @@
 Package: *
-Pin: release o=Debian,n=jessie-updates
+Pin: release o=Debian,n=stretch-updates
 Pin-Priority: 990
 
 Package: *
-Pin: release n=jessie-backports
+Pin: release n=stretch-backports
 Pin-Priority: 600
 
 Package: *
