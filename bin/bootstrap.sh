@@ -29,7 +29,7 @@ ln -sf /bin/true /usr/bin/ischroot
 
 MSG "Installing packages..."
 $APT_INSTALL apt-utils
-$APT_INSTALL ca-certificates apt-transport-https locales debconf-utils vim-tiny less
+$APT_INSTALL ca-certificates apt-transport-https diffutils patch locales debconf-utils vim-tiny less
 
 ## Link vim -> vim.tiny
 ln -sf /usr/bin/vim.tiny /usr/bin/vim
