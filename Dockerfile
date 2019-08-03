@@ -1,4 +1,4 @@
-FROM debian:stretch-backports
+FROM debian:buster-slim
 
 MAINTAINER Josh King <jking@chambana.net>
 
@@ -7,7 +7,6 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Configure Apt
 ADD sources.list /etc/apt/sources.list
-ADD distro /etc/apt/preferences.d/distro
 ADD 99default-release /etc/apt/apt.conf.d/99default-release
 
 # Prepare environment
