@@ -7,7 +7,6 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Configure Apt
 ADD sources.list /etc/apt/sources.list
-ADD 99default-release /etc/apt/apt.conf.d/99default-release
 
 # Prepare environment
 ADD lib/common.sh /app/lib/common.sh
