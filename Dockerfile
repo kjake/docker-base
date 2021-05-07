@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM debian:stable-slim
 
 MAINTAINER Josh King <jking@chambana.net>
 
