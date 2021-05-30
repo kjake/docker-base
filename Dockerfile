@@ -21,7 +21,7 @@ ENV LC_ALL C.UTF-8
 ENV TERM xterm
 
 RUN apt-get -qq update && \
-    apt-get dist-upgrade && \
-    apt-get autoremove && \
+    apt-get dist-upgrade -y && \
+    apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/
