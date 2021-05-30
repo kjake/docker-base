@@ -1,6 +1,6 @@
 FROM debian:stable-slim
 
-MAINTAINER Josh King <jking@chambana.net>
+MAINTAINER kjake
 
 ENV HOME /root
 ENV DEBIAN_FRONTEND noninteractive
@@ -19,3 +19,9 @@ ADD bashrc /etc/bash.bashrc
 
 ENV LC_ALL C.UTF-8
 ENV TERM xterm
+
+RUN apt-get -qq update && \
+    apt-get dist-upgrade && \
+    apt-get autoremove && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/
