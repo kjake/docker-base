@@ -13,7 +13,7 @@ on:
     # The branches below must be a subset of the branches above
     branches: [ master ]
   schedule:
-    - cron: '27 2 * * 3'
+    - cron: '24 5 * * 4'
 
 jobs:
   Anchore-Build-Scan:
@@ -28,9 +28,5 @@ jobs:
       with:
         image: "localbuild/testimage:latest"
         acs-report-enable: true
-        fail-build: true
-        severity-cutoff: critical
-    - name: Upload Anchore Scan Report
-      uses: github/codeql-action/upload-sarif@v1
-      with:
-        sarif_file: results.sarif
+        fail-build: false
+        severity-cutoff: high
