@@ -1,2 +1,2 @@
 # docker-base
-The Chambana.net project's base docker image.
+My base docker image, forked from chambana-net/docker-base, based on debian.
