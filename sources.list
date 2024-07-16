@@ -1,4 +1,4 @@
-deb http://cdn-fastly.deb.debian.org/debian/ sid main contrib non-free
-deb http://cdn-fastly.deb.debian.org/debian/ sid-updates main contrib non-free
-deb http://security.debian.org/debian-security sid-security/updates main
-deb http://deb.debian.org/debian sid-backports main contrib non-free
+deb https://cdn-fastly.deb.debian.org/debian/ sid main contrib non-free
+deb https://cdn-fastly.deb.debian.org/debian/ sid-updates main contrib non-free
+deb https://security.debian.org/debian-security sid-security/updates main
+deb https://deb.debian.org/debian sid-backports main contrib non-free

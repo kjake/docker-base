@@ -1,9 +1,9 @@
 FROM debian:sid-slim
 
-MAINTAINER kjake
+LABEL maintainer="kjake"
 
-ENV HOME /root
-ENV DEBIAN_FRONTEND noninteractive
+ENV HOME=/root
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Configure Apt
 ADD sources.list /etc/apt/sources.list
@@ -17,5 +17,5 @@ RUN /app/bin/bootstrap.sh
 # Install Chambana.net bashrc
 ADD bashrc /etc/bash.bashrc
 
-ENV LC_ALL C.UTF-8
-ENV TERM xterm
+ENV LC_ALL=C.UTF-8
+ENV TERM=xterm
