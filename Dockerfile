@@ -1,4 +1,4 @@
-FROM debian:testing-backports
+FROM debian:sid-slim
 
 LABEL maintainer="kjake"
 
