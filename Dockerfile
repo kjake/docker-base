@@ -1,4 +1,4 @@
-FROM debian:sid-slim
+FROM debian:stable-slim
 
 LABEL maintainer="kjake"
 
