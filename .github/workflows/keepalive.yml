@@ -1,0 +1,41 @@
+name: Keepalive
+
+# GitHub automatically disables scheduled workflows after 60 days without any
+# repository activity. Building images on a schedule does not create commits, so
+# without this the repo eventually goes idle and the Docker workflow gets turned
+# off (which is what happened here). This job makes a single empty commit when
+# the repo has been idle for a while, resetting GitHub's inactivity timer for
+# every scheduled workflow in the repository.
+
+on:
+  schedule:
+    # Weekly, well inside GitHub's 60-day inactivity window.
+    - cron: '0 5 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+      - name: Push an empty commit if the repository has gone idle
+        env:
+          # Nudge the repo once the latest commit is older than this many days.
+          # Kept comfortably below GitHub's 60-day disable threshold.
+          THRESHOLD_DAYS: 50
+        run: |
+          last_commit_epoch=$(git log -1 --format=%ct)
+          age_days=$(( ($(date +%s) - last_commit_epoch) / 86400 ))
+          echo "Most recent commit is ${age_days} day(s) old (threshold ${THRESHOLD_DAYS})."
+          if [ "${age_days}" -lt "${THRESHOLD_DAYS}" ]; then
+            echo "Repository is active; nothing to do."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty -m "chore: keepalive to keep scheduled workflows enabled"
+          git push
