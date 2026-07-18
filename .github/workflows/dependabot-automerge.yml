@@ -1,0 +1,77 @@
+name: Dependabot auto-merge
+
+# Auto-merge Dependabot pull requests once CI passes, with no manual
+# interaction required.
+#
+# This is triggered by the completion of the "Anchore Container Scan"
+# workflow (the only workflow that runs on pull requests in this repo), so a
+# PR is only ever merged after its tests have concluded successfully.
+#
+# Using `workflow_run` — rather than reacting to the `pull_request` event
+# directly — is deliberate:
+#   * `workflow_run` runs from the default branch with a read/write
+#     GITHUB_TOKEN, avoiding the read-only token Dependabot receives on its
+#     own pull_request runs. No repo settings ("Allow auto-merge") or branch
+#     protection rules are needed.
+#   * The workflow definition always comes from the base branch, so a PR
+#     cannot alter this logic to escalate the token — and we still verify the
+#     PR was actually opened by Dependabot before merging.
+
+on:
+  workflow_run:
+    workflows: ["Anchore Container Scan"]
+    types:
+      - completed
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  automerge:
+    runs-on: ubuntu-latest
+    # Only proceed when the scan finished successfully for a pull request.
+    if: >
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Merge the Dependabot PR if it passed CI
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+
+          # Find the open PR associated with the commit that was scanned.
+          pr_number=$(gh api "repos/${REPO}/commits/${HEAD_SHA}/pulls" \
+            --jq '.[] | select(.state == "open") | .number' | head -n1)
+
+          if [ -z "${pr_number}" ]; then
+            echo "No open PR found for commit ${HEAD_SHA}; nothing to merge."
+            exit 0
+          fi
+
+          pr_json=$(gh api "repos/${REPO}/pulls/${pr_number}")
+          author=$(echo "${pr_json}" | jq -r '.user.login')
+          base_ref=$(echo "${pr_json}" | jq -r '.base.ref')
+          pr_head=$(echo "${pr_json}" | jq -r '.head.sha')
+
+          if [ "${author}" != "dependabot[bot]" ]; then
+            echo "PR #${pr_number} was opened by '${author}', not Dependabot; skipping."
+            exit 0
+          fi
+
+          if [ "${base_ref}" != "master" ]; then
+            echo "PR #${pr_number} targets '${base_ref}', not master; skipping."
+            exit 0
+          fi
+
+          # Guard against a race: only merge the exact commit that passed CI.
+          if [ "${pr_head}" != "${HEAD_SHA}" ]; then
+            echo "PR #${pr_number} head (${pr_head}) has moved past the scanned commit (${HEAD_SHA}); skipping."
+            exit 0
+          fi
+
+          echo "CI passed for Dependabot PR #${pr_number}; merging."
+          gh pr merge "${pr_number}" --repo "${REPO}" --squash --delete-branch
