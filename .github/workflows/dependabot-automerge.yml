@@ -27,6 +27,14 @@ permissions:
   contents: write
   pull-requests: write
 
+# Serialize auto-merge runs. When several Dependabot scans finish at once,
+# their merge attempts would otherwise race — one wins and the rest fail
+# against a base branch that is mid-recomputation. Queuing them (rather than
+# cancelling) means each PR is handled against an up-to-date master.
+concurrency:
+  group: dependabot-automerge
+  cancel-in-progress: false
+
 jobs:
   automerge:
     runs-on: ubuntu-latest
@@ -74,4 +82,23 @@ jobs:
           fi
 
           echo "CI passed for Dependabot PR #${pr_number}; merging."
-          gh pr merge "${pr_number}" --repo "${REPO}" --squash --delete-branch
+
+          # Use a merge commit rather than --squash on purpose. A squash
+          # re-authors the change as github-actions[bot]; when that change
+          # touches .github/workflows/**, GitHub refuses it because the
+          # GITHUB_TOKEN lacks the (ungrantable) `workflows` permission. A
+          # merge commit keeps the workflow edit in Dependabot's own commit,
+          # so the token never "writes" a workflow file and the merge is
+          # allowed. Retry a few times to ride out transient mergeability
+          # recomputation right after another PR merges.
+          for attempt in 1 2 3 4 5; do
+            if gh pr merge "${pr_number}" --repo "${REPO}" --merge --delete-branch; then
+              echo "Merged PR #${pr_number}."
+              exit 0
+            fi
+            echo "Merge attempt ${attempt} for PR #${pr_number} failed; retrying in $((attempt * 10))s."
+            sleep $((attempt * 10))
+          done
+
+          echo "Could not merge PR #${pr_number} after multiple attempts." >&2
+          exit 1
