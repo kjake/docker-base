@@ -45,8 +45,11 @@ if [ "${SMOKE_OFFLINE:-0}" != 1 ]; then
   check "apt-get update succeeds for every repository" apt-get -qq update --error-on=any
   for component in main contrib non-free non-free-firmware; do
     check "testing/$component index is available" bash -c "apt-cache policy | grep -q ' testing/$component '"
-    check "testing-security/$component index is available" bash -c "apt-cache policy | grep -q ' testing-security/$component '"
   done
+  # testing-security usually carries no packages, so it publishes no indexes;
+  # check that its signed release file was fetched instead.
+  check "testing-security release file was fetched" \
+    bash -c 'ls /var/lib/apt/lists/*debian-security_dists_testing-security_InRelease'
   rm -rf /var/lib/apt/lists/*
 fi
 
