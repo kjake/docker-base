@@ -1,0 +1,20 @@
+# Debian testing ("rolling") with every archive component enabled, so images
+# built on top of this one get newer upstream releases than stable offers and
+# can install contrib and non-free packages.
+#
+# Plain http is only used for the very first `apt-get update`, because the
+# slim base image ships without ca-certificates. bin/bootstrap.sh installs
+# ca-certificates and then switches these URIs to https. Packages are verified
+# with the archive signing key either way.
+
+Types: deb
+URIs: http://deb.debian.org/debian
+Suites: testing testing-updates
+Components: main contrib non-free non-free-firmware
+Signed-By: /usr/share/keyrings/debian-archive-keyring.pgp
+
+Types: deb
+URIs: http://deb.debian.org/debian-security
+Suites: testing-security
+Components: main contrib non-free non-free-firmware
+Signed-By: /usr/share/keyrings/debian-archive-keyring.pgp
